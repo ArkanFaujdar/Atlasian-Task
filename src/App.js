@@ -26,6 +26,7 @@ function App() {
     }));
   };
 
+  // Fetching the products data from the api
   useEffect(() => {
     async function fetchData() {
       let response = await fetch("http://dummyjson.com/products");
@@ -36,7 +37,7 @@ function App() {
     fetchData();
   }, [dispatch]);
 
-  // ADD, DELETE, UPDATE handlers
+  // ADD handler
   const handleAddProduct = () => {
     const product = {
       id: storeData[storeData.length - 1].id + 1,
@@ -48,10 +49,12 @@ function App() {
     setNewProduct({ title: "", price: "", stock: "" });
   };
 
+  // DELETE handler
   const handleDeleteProduct = (id) => {
     dispatch(deleteProduct(id));
   };
 
+  // UPDATE handler
   const handleUpdateProduct = (id) => {
     const updatedProduct = storeData.find((product) => product.id === id);
     if (updatedProduct) {
