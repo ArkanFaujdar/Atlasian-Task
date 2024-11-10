@@ -57,6 +57,7 @@ function App() {
     if (updatedProduct) {
       const updatedData = {
         ...updatedProduct,
+        stock: updatedProduct.stock + 10,
         price: updatedProduct.price + 100,
       };
       dispatch(updateProduct(updatedData));
