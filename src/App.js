@@ -73,6 +73,7 @@ function App() {
       <div className="mb-4 flex">
         <input
           type="text"
+          name="title"
           value={newProduct.title}
           onChange={handleInputChange}
           placeholder="Title"
@@ -80,6 +81,7 @@ function App() {
         />
         <input
           type="text"
+          name="price"
           value={newProduct.price}
           onChange={handleInputChange}
           placeholder="Price"
@@ -87,6 +89,7 @@ function App() {
         />
         <input
           type="text"
+          name="stock"
           value={newProduct.stock}
           onChange={handleInputChange}
           placeholder="Stock"
