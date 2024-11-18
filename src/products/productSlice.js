@@ -10,7 +10,6 @@ const productsSlice = createSlice({
       return action.payload;
     },
     addProduct(state, action) {
-      console.log(action.payload);
       state.push(action.payload);
     },
     deleteProduct(state, action) {
