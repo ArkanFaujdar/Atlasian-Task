@@ -11,7 +11,6 @@ import {
 function App() {
   const dispatch = useDispatch();
   const storeData = useSelector((store) => store.product);
-
   const [newProduct, setNewProduct] = useState({
     title: "",
     price: "",
@@ -54,56 +53,123 @@ function App() {
     dispatch(deleteProduct(id));
   };
 
-  // UPDATE handler
-  const handleUpdateProduct = (id) => {
-    const updatedProduct = storeData.find((product) => product.id === id);
-    if (updatedProduct) {
-      const updatedData = {
-        ...updatedProduct,
-        stock: updatedProduct.stock + 10,
-        price: updatedProduct.price + 100,
-      };
-      dispatch(updateProduct(updatedData));
-    }
+  // UPDATE handlers
+
+  const [openUpdateSection, setOpenUpdateSection] = useState(false);
+
+  const [updatedProduct, setUpdateProduct] = useState({
+    updatedTitle: "",
+    updateStock: "",
+    updatedPrice: "",
+  });
+
+  const handleUpdatedInputChange = (e) => {
+    const { name, value } = e.target;
+    setUpdateProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleOpenUpdateSection = (ID) => {
+    setUpdateProduct((data) => ({ ...data, id: ID }));
+    setOpenUpdateSection(!openUpdateSection);
+  };
+
+  const handleUpdateProduct = () => {
+    const updatedData = {
+      ...updatedProduct,
+      title: updatedProduct.updatedTitle,
+      stock: updatedProduct.updateStock,
+      price: updatedProduct.updatedPrice,
+    };
+    dispatch(updateProduct(updatedData));
+    setUpdateProduct({ updatedPrice: "", updateStock: "", updatedTitle: "" });
+    setOpenUpdateSection(false);
+    alert(
+      `Product Details with ID - ${updatedProduct.id} successfully updated`
+    );
   };
 
   return (
     <div className="App p-6 bg-gray-100">
-      <h2 className="text-xl mb-4 text-bold h5">Product List</h2>
-      <div className="mb-4 flex">
-        <input
-          type="text"
-          name="title"
-          value={newProduct.title}
-          onChange={handleInputChange}
-          placeholder="Title"
-          className="p-2 border mb-2 w-full mx-2"
-        />
-        <input
-          type="text"
-          name="price"
-          value={newProduct.price}
-          onChange={handleInputChange}
-          placeholder="Price"
-          className="p-2 border mb-2 w-full mx-2"
-        />
-        <input
-          type="text"
-          name="stock"
-          value={newProduct.stock}
-          onChange={handleInputChange}
-          placeholder="Stock"
-          className="p-2 border mb-2 w-full mx-2"
-        />
-      </div>
-      <div className="flex justify-center mb-4">
-        <button
-          onClick={handleAddProduct}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Add Product
-        </button>
-      </div>
+      {!openUpdateSection ? (
+        <>
+          <h2 className="text-xl mb-4 text-bold h5">Product List</h2>
+          <div className="mb-4 flex">
+            <input
+              type="text"
+              name="title"
+              value={newProduct.title}
+              onChange={handleInputChange}
+              placeholder="Title"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+            <input
+              type="text"
+              name="price"
+              value={newProduct.price}
+              onChange={handleInputChange}
+              placeholder="Price"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+            <input
+              type="text"
+              name="stock"
+              value={newProduct.stock}
+              onChange={handleInputChange}
+              placeholder="Stock"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+          </div>
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={handleAddProduct}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            >
+              Add Product
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 className="text-xl mb-4 text-bold h5">Update Details</h2>
+          <div className="mb-4 flex">
+            <input
+              type="text"
+              name="updatedTitle"
+              value={updatedProduct.updatedTitle}
+              onChange={handleUpdatedInputChange}
+              placeholder="Title"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+            <input
+              type="text"
+              name="updatedPrice"
+              value={updatedProduct.updatedPrice}
+              onChange={handleUpdatedInputChange}
+              placeholder="Price"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+            <input
+              type="text"
+              name="updateStock"
+              value={updatedProduct.updateStock}
+              onChange={handleUpdatedInputChange}
+              placeholder="Stock"
+              className="p-2 border mb-2 w-full mx-2"
+            />
+          </div>
+          <div className="flex justify-center mb-4">
+            <button
+              onClick={handleUpdateProduct}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            >
+              Update Details
+            </button>
+          </div>
+        </>
+      )}
 
       <table className="min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden">
         <thead className="bg-green-500 text-white">
@@ -124,7 +190,7 @@ function App() {
               <td className="px-6 py-3 border-t">{data.stock}</td>
               <td className="px-6 py-3 border-t">
                 <button
-                  onClick={() => handleUpdateProduct(data.id)}
+                  onClick={() => handleOpenUpdateSection(data.id)}
                   className="px-4 py-2 bg-green-500 text-white rounded-lg"
                 >
                   Update
